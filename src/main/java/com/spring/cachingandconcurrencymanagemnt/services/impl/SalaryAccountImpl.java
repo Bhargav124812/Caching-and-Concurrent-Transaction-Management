@@ -31,7 +31,7 @@ public class SalaryAccountImpl implements SalaryAccountService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public SalaryAccount incrementBalance(Long accountId) {
         SalaryAccount salaryAccount =salaryAccountRepository.findById(accountId).orElseThrow(() -> new ResourceNotFoundException("No Salary Account With ID "+accountId ));
         BigDecimal prevBalance = salaryAccount.getBalance();
