@@ -5,6 +5,7 @@ import com.spring.cachingandconcurrencymanagemnt.entities.Employee;
 import com.spring.cachingandconcurrencymanagemnt.exceptions.ResourceNotFoundException;
 import com.spring.cachingandconcurrencymanagemnt.repositories.EmployeeRepository;
 import com.spring.cachingandconcurrencymanagemnt.services.EmployeeService;
+import com.spring.cachingandconcurrencymanagemnt.services.SalaryAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
+    private final SalaryAccountService salaryAccountService;
     private final String CACHE_NAME = "employees";
 
     @Override
@@ -50,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         Employee newEmployee = modelMapper.map(employeeDto, Employee.class);
         Employee savedEmployee = employeeRepository.save(newEmployee);
+        salaryAccountService.createAccount(savedEmployee);
         log.info("Successfully created new employee with id: {}", savedEmployee.getId());
         return modelMapper.map(savedEmployee, EmployeeDto.class);
     }
